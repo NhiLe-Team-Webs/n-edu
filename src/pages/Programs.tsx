@@ -129,7 +129,7 @@ const Programs = () => {
                     </div>
                   </div>
                   <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                    Xem chi tiết
+                    <a href={`/programs/${index + 1}`}>Xem chi tiết</a>
                   </Button>
                 </div>
               </Card>
