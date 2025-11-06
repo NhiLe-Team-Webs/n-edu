@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 
 const FloatingActions = () => {
   const actions = [
-    { icon: MessageSquare, label: "Chat", href: "#contact" },
-    { icon: Phone, label: "Phone", href: "tel:+65" },
-    { icon: Mail, label: "Email", href: "mailto:info@nhi.sg" },
-    { icon: Calendar, label: "Schedule", href: "#courses" },
+    { icon: MessageSquare, label: "Chat", href: "/contact" },
+    { icon: Phone, label: "Phone", href: "tel:+84789785904" },
+    { icon: Mail, label: "Email", href: "mailto:nedu@nhi.sg" },
+    { icon: Calendar, label: "Schedule", href: "/programs" },
   ];
 
   return (

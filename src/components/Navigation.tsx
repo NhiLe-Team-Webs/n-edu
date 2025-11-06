@@ -6,11 +6,11 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const menuItems = [
-    { label: "Trang chủ", href: "#home" },
-    { label: "Về chúng tôi", href: "#about" },
-    { label: "Khóa học", href: "#courses" },
-    { label: "Thử thách 30n", href: "#challenge" },
-    { label: "Liên hệ", href: "#contact" },
+    { label: "Trang chủ", href: "/" },
+    { label: "Về chúng tôi", href: "https://www.nhi.sg/", external: true },
+    { label: "Khóa học", href: "/programs" },
+    { label: "Thử thách 30n", href: "/challenge" },
+    { label: "Liên hệ", href: "/contact" },
   ];
 
   return (
@@ -18,7 +18,7 @@ const Navigation = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a href="#home" className="flex items-center gap-2">
+          <a href="/" className="flex items-center gap-2">
             <div className="text-2xl font-bold">
               <span className="text-primary">N</span>
               <span className="text-foreground">Edu</span>
@@ -32,11 +32,16 @@ const Navigation = () => {
                 key={item.label}
                 href={item.href}
                 className="text-sm font-medium text-foreground hover:text-primary transition-colors"
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noopener noreferrer" : undefined}
               >
                 {item.label}
               </a>
             ))}
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6">
+            <Button 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
+              onClick={() => window.location.href = '/programs'}
+            >
               Đăng ký ngay
             </Button>
           </div>
@@ -60,11 +65,19 @@ const Navigation = () => {
                   href={item.href}
                   className="text-sm font-medium text-foreground hover:text-primary transition-colors py-2"
                   onClick={() => setIsMenuOpen(false)}
+                  target={item.external ? "_blank" : undefined}
+                  rel={item.external ? "noopener noreferrer" : undefined}
                 >
                   {item.label}
                 </a>
               ))}
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
+              <Button 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  window.location.href = '/programs';
+                }}
+              >
                 Đăng ký ngay
               </Button>
             </div>

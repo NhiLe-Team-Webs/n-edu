@@ -42,6 +42,7 @@ const CoursesSection = () => {
             variant="outline" 
             size="lg"
             className="border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
+            onClick={() => window.location.href = '/programs'}
           >
             Khám phá thêm
           </Button>

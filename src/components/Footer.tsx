@@ -45,28 +45,28 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h3 className="font-bold text-foreground mb-4">Liên kết nhanh</h3>
-            <ul className="space-y-2">
-              <li>
-                <a href="#home" className="text-muted-foreground hover:text-primary transition-colors">
-                  Trang chủ
-                </a>
-              </li>
-              <li>
-                <a href="#about" className="text-muted-foreground hover:text-primary transition-colors">
-                  Về chúng tôi
-                </a>
-              </li>
-              <li>
-                <a href="#courses" className="text-muted-foreground hover:text-primary transition-colors">
-                  Khóa học
-                </a>
-              </li>
-              <li>
-                <a href="#challenge" className="text-muted-foreground hover:text-primary transition-colors">
-                  Thử thách 30n
-                </a>
-              </li>
-            </ul>
+          <ul className="space-y-2">
+            <li>
+              <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
+                Trang chủ
+              </a>
+            </li>
+            <li>
+              <a href="https://www.nhi.sg/" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary transition-colors">
+                Về chúng tôi
+              </a>
+            </li>
+            <li>
+              <a href="/programs" className="text-muted-foreground hover:text-primary transition-colors">
+                Khóa học
+              </a>
+            </li>
+            <li>
+              <a href="/challenge" className="text-muted-foreground hover:text-primary transition-colors">
+                Thử thách 30n
+              </a>
+            </li>
+          </ul>
           </div>
 
           {/* Contact */}
