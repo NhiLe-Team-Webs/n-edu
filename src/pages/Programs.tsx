@@ -1,84 +1,60 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calendar, User } from "lucide-react";
+import { BadgeCheck, Clock, MonitorPlay } from "lucide-react";
+import { courses, currencyFormatter, type Course } from "@/lib/mockCourses";
+import { useCart } from "@/hooks/useCart";
+import { toast } from "sonner";
+
+const filters = ["Tat ca", "Online", "Offline", "Hybrid", "AI", "Marketing", "Strategy"];
 
 const Programs = () => {
-  const [activeFilter, setActiveFilter] = useState("Tất cả");
+  const [activeFilter, setActiveFilter] = useState("Tat ca");
+  const { addItem } = useCart();
 
-  const filters = ["Tất cả", "Offline", "Online", "Doanh nghiệp"];
+  const filteredCourses = useMemo(() => {
+    if (activeFilter === "Tat ca") return courses;
+    return courses.filter(
+      (course) =>
+        course.mode === activeFilter || course.categories.includes(activeFilter)
+    );
+  }, [activeFilter]);
 
-  const programs = [
-    {
-      image: "/images/sucmanhvohan.jpg",
-      categories: ["Doanh nhân", "Doanh nghiệp"],
-      title: "Sức Mạnh Vô Hạn 2",
-      sessions: "6 tháng online và 4,5 ngày offline",
-      instructor: "NhiLe x Melvin",
-      type: "Offline",
-    },
-    {
-      image: "/images/lachinhminh.jpg",
-      categories: ["Phát triển bản thân", "Là chính mình"],
-      title: "Là Chính Mình 3",
-      sessions: "3,5 ngày",
-      instructor: "NhiLe x Guest Instructors",
-      type: "Offline",
-    },
-    {
-      image: "/images/genai.jpg",
-      categories: ["AI", "Phát triển kỹ năng số"],
-      title: "Gen AI 101",
-      sessions: "2 buổi",
-      instructor: "Linda Hui",
-      type: "Online",
-    },
-    {
-      image: "/images/thuonghieu.jpg",
-      categories: ["Thương hiệu", "Doanh nghiệp"],
-      title: "Thương Hiệu Của Bạn",
-      sessions: "4 ngày",
-      instructor: "NhiLe",
-      type: "Online",
-    },
-    {
-      image: "/images/cuocsong.jpg",
-      categories: ["Phát triển bản thân", "Cảm xúc"],
-      title: "Cuộc Sống Của Bạn",
-      sessions: "3 ngày",
-      instructor: "NhiLe",
-      type: "Online",
-    },
-    {
-      image: "/images/aibusiness.jpg",
-      categories: ["AI", "Phát triển kỹ năng số"],
-      title: "AI For Business Communication",
-      sessions: "3 buổi",
-      instructor: "Linda Hui",
-      type: "Online",
-    },
-  ];
-
-  const filteredPrograms =
-    activeFilter === "Tất cả"
-      ? programs
-      : programs.filter((program) => program.type === activeFilter || (activeFilter === "Doanh nghiệp" && program.categories.includes("Doanh nghiệp")));
+  const handleAddToCart = (course: Course) => {
+    addItem(course);
+    toast.success("Da them vao gio hang", {
+      description: course.title,
+      action: {
+        label: "Xem gio hang",
+        onClick: () => {
+          window.location.href = "/cart";
+        },
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
-      
+      <Navigation showCartIcon />
+
       <div className="pt-24 pb-16">
         <div className="container mx-auto px-4">
-          {/* Header */}
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-8 text-primary">
-            CÁC KHÓA HỌC CHẤT LƯỢNG
-          </h1>
+          <div className="text-center mb-10">
+            <p className="text-primary font-semibold tracking-[0.3em] uppercase mb-3">
+              Courses
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Khoa hoc tai Skills Bridge
+            </h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Lua chon khoa hoc phu hop de nang cap ky nang lam viec voi AI, tu dong hoa va
+              ra quyet dinh dua tren du lieu. Hien tai cac noi dung dung mock data de demo luong.
+            </p>
+          </div>
 
-          {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
             {filters.map((filter) => (
               <Button
                 key={filter}
@@ -86,8 +62,8 @@ const Programs = () => {
                 onClick={() => setActiveFilter(filter)}
                 className={
                   activeFilter === filter
-                    ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                    : "border-2 border-border hover:border-primary"
+                    ? "bg-primary text-white"
+                    : "border border-border text-muted-foreground hover:text-foreground"
                 }
               >
                 {filter}
@@ -95,42 +71,80 @@ const Programs = () => {
             ))}
           </div>
 
-          {/* Programs Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPrograms.map((program, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div className="aspect-[4/3] overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCourses.map((course) => (
+              <Card key={course.id} className="overflow-hidden group">
+                <div className="relative aspect-video overflow-hidden">
                   <img
-                    src={program.image}
-                    alt={program.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
+                  {course.badge && (
+                    <span className="absolute top-3 left-3 bg-white/90 text-primary text-xs font-semibold px-3 py-1 rounded-full shadow-sm">
+                      {course.badge}
+                    </span>
+                  )}
                 </div>
-                <div className="p-6">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {program.categories.map((category, i) => (
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <MonitorPlay className="w-4 h-4" />
+                      {course.mode}
+                    </span>
+                    <span>-</span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-4 h-4" />
+                      {course.duration}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-foreground">
+                    {course.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {course.shortDescription}
+                  </p>
+                  <div>
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-2xl font-bold text-primary">
+                        {currencyFormatter.format(course.price)}
+                      </span>
+                      {course.originalPrice && (
+                        <span className="text-sm text-muted-foreground line-through">
+                          {currencyFormatter.format(course.originalPrice)}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Thanh toan mot lan, truy cap tron doi.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {course.categories.map((category) => (
                       <span
-                        key={i}
-                        className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium"
+                        key={`${course.id}-${category}`}
+                        className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs text-muted-foreground"
                       >
+                        <BadgeCheck className="w-3 h-3 text-primary" />
                         {category}
                       </span>
                     ))}
                   </div>
-                  <h3 className="text-xl font-bold text-foreground mb-4">{program.title}</h3>
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Calendar className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span>Số buổi học: <strong>{program.sessions}</strong></span>
-                    </div>
-                    <div className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <User className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                      <span>Người dẫn đường: <strong>{program.instructor}</strong></span>
-                    </div>
+                  <div className="flex flex-col gap-3 sm:flex-row">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => (window.location.href = `/programs/${course.id}`)}
+                    >
+                      Xem chi tiet
+                    </Button>
+                    <Button
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-semibold"
+                      onClick={() => handleAddToCart(course)}
+                    >
+                      Them vao gio hang
+                    </Button>
                   </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                    <a href={`/programs/${index + 1}`}>Xem chi tiết</a>
-                  </Button>
                 </div>
               </Card>
             ))}

@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/useCart";
 
-const Navigation = () => {
+type NavigationProps = {
+  showCartIcon?: boolean;
+};
+
+const Navigation = ({ showCartIcon = false }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { totalItems } = useCart();
 
   const menuItems = [
     { label: "Trang chủ", href: "/" },
@@ -17,7 +23,6 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo */}
           <a href="/" className="flex items-center gap-2">
             <div className="text-2xl font-bold">
               <span className="text-primary">N</span>
@@ -25,7 +30,6 @@ const Navigation = () => {
             </div>
           </a>
 
-          {/* Desktop Menu */}
           <div className="hidden lg:flex items-center gap-8">
             {menuItems.map((item) => (
               <a
@@ -38,24 +42,55 @@ const Navigation = () => {
                 {item.label}
               </a>
             ))}
-            <Button 
-              className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
-              onClick={() => window.location.href = '/programs'}
-            >
-              Đăng ký ngay
-            </Button>
+            <div className="flex items-center gap-4">
+              {showCartIcon && (
+                <>
+                  <button
+                    className="p-2 rounded-full border border-transparent hover:border-border transition-colors"
+                    aria-label="Tìm kiếm khóa học"
+                  >
+                    <Search className="w-5 h-5" />
+                  </button>
+                  <a
+                    href="/cart"
+                    className="relative p-2 rounded-full border border-border hover:border-primary transition-colors"
+                    aria-label="Giỏ hàng"
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    {totalItems > 0 && (
+                      <span className="absolute -top-1 -right-1 min-w-[20px] h-[20px] rounded-full bg-primary text-white text-[11px] flex items-center justify-center">
+                        {totalItems}
+                      </span>
+                    )}
+                  </a>
+                </>
+              )}
+              <Button
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6"
+                onClick={() => (window.location.href = "/programs")}
+              >
+                Đăng ký ngay
+              </Button>
+            </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="lg:hidden flex items-center gap-3">
+            {showCartIcon && (
+              <a href="/cart" className="relative p-2" aria-label="Giỏ hàng">
+                <ShoppingBag className="w-5 h-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] rounded-full bg-primary text-white text-[10px] flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </a>
+            )}
+            <button className="p-2" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 border-t border-border">
             <div className="flex flex-col gap-4">
@@ -71,11 +106,11 @@ const Navigation = () => {
                   {item.label}
                 </a>
               ))}
-              <Button 
+              <Button
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                 onClick={() => {
                   setIsMenuOpen(false);
-                  window.location.href = '/programs';
+                  window.location.href = "/programs";
                 }}
               >
                 Đăng ký ngay

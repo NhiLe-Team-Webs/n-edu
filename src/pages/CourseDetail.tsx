@@ -74,7 +74,7 @@ const CourseDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navigation />
+      <Navigation showCartIcon />
 
       <div className="pt-20">
         {/* Hero Banner */}
